@@ -1,0 +1,2 @@
+# finobank
+Finologee assessment
