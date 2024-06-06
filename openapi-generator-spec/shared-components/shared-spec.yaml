@@ -1,0 +1,22 @@
+openapi: 3.0.3
+info:
+  title: Accounts microservice - OpenAPI 3.0
+  description: Accounts microservice API Spec
+  version: 1.0.0
+
+servers:
+  - url: api/v1
+
+paths: {}
+
+components:
+  schemas:
+    ApiAccounts:
+      type: object
+      properties:
+        id:
+          type: string
+        accountNumber:
+          type: string
+        accountName:
+          type: string
