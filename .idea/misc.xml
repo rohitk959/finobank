@@ -9,6 +9,7 @@
         <option value="$PROJECT_DIR$/payments/pom.xml" />
         <option value="$PROJECT_DIR$/master-scripts/pom.xml" />
         <option value="$PROJECT_DIR$/configserver/pom.xml" />
+        <option value="$PROJECT_DIR$/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">

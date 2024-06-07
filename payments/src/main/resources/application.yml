@@ -1,0 +1,41 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: "payments"
+  config:
+    import: "configserver:http://localhost:8071/"
+  datasource:
+    url: jdbc:postgresql://localhost:5433/paymentsdb
+    username: postgres
+    password: postgres
+  flyway:
+    locations: classpath:/db
+    baseline-on-migrate: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  health:
+    readiness-state:
+      enabled: true
+    liveness-state:
+      enabled: true
+  endpoint:
+    shutdown:
+      enabled: true
+    health:
+      probes:
+        enabled: true
+  info:
+    env:
+      enabled: true
+
+info:
+  app:
+    name: "payments"
+    description: "Finobank Payments Application"
+    version: "1.0.0"
