@@ -14,39 +14,16 @@
         <module>configserver</module>
         <module>accounts</module>
         <module>payments</module>
+        <module>users</module>
     </modules>
 
     <build>
         <plugins>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-invoker-plugin</artifactId>
-                <version>3.2.2</version>
-                <executions>
-                    <execution>
-                        <id>execute-multiple-goals</id>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                        <configuration>
-                            <projects>
-                                <include>configserver</include>
-                                <include>accounts</include>
-                                <include>payments</include>
-                                <!-- Add more projects as needed -->
-                            </projects>
-                            <goals>
-                                <!-- Specify multiple goals here -->
-                                <goal>clean</goal>
-                                <goal>install</goal>
-                                <goal>jib:build</goal>
-                                <!-- Add more goals as needed -->
-                            </goals>
-                        </configuration>
-                    </execution>
-                </executions>
+                <groupId>com.google.cloud.tools</groupId>
+                <artifactId>jib-maven-plugin</artifactId>
+                <version>3.4.3</version>
             </plugin>
         </plugins>
     </build>
-
 </project>

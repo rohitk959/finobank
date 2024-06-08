@@ -8,9 +8,9 @@ services:
     volumes:
       - accountsdb:/var/lib/postgresql/data
     environment:
-      - POSTGRES_DB=accountsdb
+      POSTGRES_DB: accountsdb
     extends:
-      file: common-config.yaml
+      file: common-config.yml
       service: microservice-db-config
 
   paymentsdb:
@@ -20,9 +20,9 @@ services:
     volumes:
       - paymentsdb:/var/lib/postgresql/data
     environment:
-      - POSTGRES_DB=paymentsdb
+      POSTGRES_DB: paymentsdb
     extends:
-      file: common-config.yaml
+      file: common-config.yml
       service: microservice-db-config
 
   usersdb:
@@ -32,14 +32,14 @@ services:
     volumes:
       - usersdb:/var/lib/postgresql/data
     environment:
-      - POSTGRES_DB=usersdb
+      POSTGRES_DB: usersdb
     extends:
-      file: common-config.yaml
+      file: common-config.yml
       service: microservice-db-config
 
   configserver:
     image: "rohitkalaghatkar/configserver:v1"
-    container_name: configserver-ms
+    container_name: configserver
     ports:
       - "8071:8071"
     healthcheck:
@@ -49,24 +49,49 @@ services:
       retries: 10
       start_period: 10s
     extends:
-      file: common-config.yaml
+      file: common-config.yml
       service: microservice-base-config
 
   accounts:
-    image: "rohitkalaghatkar/accounts:v1"
+    image: "rohitkalaghatkar/accounts:latest"
     container_name: accounts-ms
     ports:
       - "8080:8080"
-    environment:
-      SPRING_APPLICATION_NAME: "accounts"
-      SPRING_DATASOURCE_URL: "jdbc:mysql://accountsdb:3306/accountsdb"
     depends_on:
       accountsdb:
         condition: service_healthy
       configserver:
         condition: service_healthy
     extends:
-      file: common-config.yaml
+      file: common-config.yml
+      service: microservice-configserver-config
+
+  payments:
+    image: "rohitkalaghatkar/payments:latest"
+    container_name: payments-ms
+    ports:
+      - "8081:8081"
+    depends_on:
+      paymentsdb:
+        condition: service_healthy
+      configserver:
+        condition: service_healthy
+    extends:
+      file: common-config.yml
+      service: microservice-configserver-config
+
+  users:
+    image: "rohitkalaghatkar/users:latest"
+    container_name: users-ms
+    ports:
+      - "8082:8082"
+    depends_on:
+      paymentsdb:
+        condition: service_healthy
+      configserver:
+        condition: service_healthy
+    extends:
+      file: common-config.yml
       service: microservice-configserver-config
 
 volumes:
@@ -79,4 +104,4 @@ volumes:
 
 networks:
   finobank:
-    driver: "bridge"
+    driver: bridge
