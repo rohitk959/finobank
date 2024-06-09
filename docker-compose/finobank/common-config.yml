@@ -31,5 +31,6 @@ services:
     environment:
       SPRING_PROFILES_ACTIVE: docker
       CONFIG_SERVER_URL: http://configserver:8071/
+      EUREKA_SERVER_URL: http://eurekaserver:8070/
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: postgres

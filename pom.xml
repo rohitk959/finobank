@@ -12,6 +12,7 @@
     <!-- sub modules -->
     <modules>
         <module>configserver</module>
+        <module>eurekaserver</module>
         <module>accounts</module>
         <module>payments</module>
         <module>users</module>
