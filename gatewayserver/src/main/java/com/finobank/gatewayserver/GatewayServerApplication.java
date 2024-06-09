@@ -22,11 +22,11 @@ public class GatewayServerApplication {
                         .uri("lb://ACCOUNTS"))
                 .route(p -> p
                         .path("/finobank/payments/**")
-                        .filters(f -> f.rewritePath("/finobank/loans/(?<segment>.*)", "/${segment}"))
+                        .filters(f -> f.rewritePath("/finobank/payments/(?<segment>.*)", "/${segment}"))
                         .uri("lb://PAYMENTS"))
                 .route(p -> p
                         .path("/finobank/users/**")
-                        .filters(f -> f.rewritePath("/finobank/cards/(?<segment>.*)", "/${segment}"))
+                        .filters(f -> f.rewritePath("/finobank/users/(?<segment>.*)", "/${segment}"))
                         .uri("lb://USERS")).build();
 
 
