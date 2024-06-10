@@ -1,4 +1,4 @@
-package com.finobank.gatewayserver.filters;
+package com.finobank.gatewayserver.core.filters;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
