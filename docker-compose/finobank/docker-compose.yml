@@ -70,7 +70,6 @@ services:
       file: common-config.yml
       service: microservice-config
 
-
   accounts:
     image: "rohitkalaghatkar/accounts:latest"
     container_name: accounts-ms
@@ -131,6 +130,49 @@ services:
       file: common-config.yml
       service: microservice-config
 
+  keycloakdb:
+    container_name: keycloakdb
+    ports:
+      - "5431:5432"
+    volumes:
+      - keycloakdb:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: keycloakdb
+    extends:
+      file: common-config.yml
+      service: microservice-db-config
+
+  keycloak:
+    container_name: keycloak
+    image: quay.io/keycloak/keycloak:24.0
+    command: start-dev
+    ports:
+      - "8060:8080"
+    environment:
+      KC_HOSTNAME: localhost
+      KC_HTTP_ENABLED: true
+      KC_HOSTNAME_STRICT_HTTPS: false
+      KC_LOG_LEVEL: info
+      KC_METRICS_ENABLED: true
+      KC_HEALTH_ENABLED: true
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://keycloakdb:5432/keycloakdb
+      KC_DB_USERNAME: postgres
+      KC_DB_PASSWORD: postgres
+    depends_on:
+      keycloakdb:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "exec 3<>/dev/tcp/127.0.0.1/8080;echo -e \"GET /health/ready HTTP/1.1\r\nhost: http://localhost\r\nConnection: close\r\n\r\n\" >&3;grep \"HTTP/1.1 200 OK\" <&3"]
+      interval: 5s
+      timeout: 2s
+      retries: 15
+    extends:
+      file: common-config.yml
+      service: microservice-config
+
   gatewayserver:
     image: "rohitkalaghatkar/gatewayserver:latest"
     container_name: gatewayserver-ms
@@ -138,6 +180,8 @@ services:
       - "8072:8072"
     depends_on:
       accounts:
+        condition: service_healthy
+      keycloak:
         condition: service_healthy
       payments:
         condition: service_healthy
@@ -149,6 +193,8 @@ services:
 
 volumes:
   accountsdb:
+    driver: local
+  keycloakdb:
     driver: local
   paymentsdb:
     driver: local
