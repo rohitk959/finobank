@@ -1,19 +1,8 @@
 package com.finobank.accounts.adapter.database.entity;
 
 import com.finobank.accounts.core.domain.AccountStatus;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.persistence.*;
+import lombok.*;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -47,9 +36,9 @@ public class AccountEntity {
     @Column(name = "STATUS")
     private AccountStatus status;
 
-    /*@Type(ListArrayType.class)
+    @ElementCollection
     @Column(name = "USERS", columnDefinition = "UUID[]")
-    private List<UUID> users;*/
+    private List<UUID> users;
 
     @CreatedDate
     @Column(name = "CREATED_AT", nullable = false)

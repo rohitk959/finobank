@@ -21,18 +21,29 @@ paths:
           content:
             application/json:
               schema:
-                type: string
+                type: array
+                items:
+                  $ref: '../shared-components/shared-spec.yaml#/components/schemas/ApiAccount'
         '400':
           description: Invalid request
-
-components:
-  schemas:
-    ApiAccounts:
-      type: object
-      properties:
-        id:
-          type: string
-        accountNumber:
-          type: string
-        accountName:
-          type: string
+    post:
+      tags:
+        - Accounts
+      summary: Create an account for current logged in user
+      description: Create an account for current logged in user
+      operationId: createAccount
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '../shared-components/shared-spec.yaml#/components/schemas/ApiAccount'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../shared-components/shared-spec.yaml#/components/schemas/ApiAccount'
+        '400':
+          description: Invalid request

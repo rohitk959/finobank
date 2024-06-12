@@ -7,11 +7,11 @@ info:
 servers:
   - url: api/v1
 
-paths: {}
+paths: { }
 
 components:
   schemas:
-    ApiAccounts:
+    ApiAccount:
       type: object
       properties:
         id:
@@ -19,4 +19,48 @@ components:
         accountNumber:
           type: string
         accountName:
+          type: string
+        balance:
+          type: array
+          items:
+            $ref: "#/components/schemas/ApiBalance"
+        status:
+          $ref: "#/components/schemas/ApiAccountStatus"
+        users:
+          type: array
+          items:
+            $ref: "#/components/schemas/ApiUser"
+
+    ApiAccountStatus:
+      enum:
+        - ENABLED
+        - BLOCKED
+    
+    ApiBalance:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        amount:
+          type: number
+        currency:
+          type: string
+        type:
+          $ref: '#/components/schemas/ApiBalanceType'
+
+    ApiBalanceType:
+      enum:
+        - AVAILABLE
+        - END_OF_DAY
+
+    ApiUser:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        username:
+          type: string
+        address:
           type: string

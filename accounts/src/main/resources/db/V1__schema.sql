@@ -18,7 +18,6 @@ create table if not exists BALANCE
     ACCOUNT_ID uuid        not null,
     AMOUNT     numeric(3)  NOT NULL,
     CURRENCY   varchar(3)  NOT NULL,
-    PARENT     uuid,
     TYPE       varchar(30) not null,
     CREATED_AT timestamp   NOT NULL,
     CREATED_BY varchar(60) NOT NULL,
