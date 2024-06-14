@@ -13,7 +13,7 @@ public class Balance {
     private UUID id;
     private BigDecimal amount;
     private String currency;
-    private BalanceType balanceType;
+    private BalanceType type;
     private LocalDateTime createdAt;
     private UUID createdBy;
 }

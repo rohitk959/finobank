@@ -160,6 +160,9 @@
                             <configOptions>
                                 <interfaceOnly>true</interfaceOnly>
                                 <useSpringBoot3>true</useSpringBoot3>
+                                <additionalModelTypeAnnotations>
+                                    @lombok.ToString;@lombok.NoArgsConstructor;@lombok.AllArgsConstructor;@lombok.Builder(toBuilder=true);@lombok.Getter;@lombok.EqualsAndHashCode;
+                                </additionalModelTypeAnnotations>
                             </configOptions>
                         </configuration>
                     </execution>

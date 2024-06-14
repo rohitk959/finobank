@@ -21,7 +21,7 @@ components:
           type: string
         accountName:
           type: string
-        balance:
+        balances:
           type: array
           items:
             $ref: "#/components/schemas/ApiBalance"

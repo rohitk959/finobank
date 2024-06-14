@@ -4,11 +4,19 @@ create table if not exists ACCOUNT
     ACCOUNT_NAME   varchar(100) NOT NULL,
     ACCOUNT_NUMBER varchar(34)  NOT NULL,
     STATUS         varchar(10)  not null,
-    USERS          text         NOT NULL,
     CREATED_AT     timestamp    NOT NULL,
     CREATED_BY     varchar(60)  NOT NULL,
     UPDATED_AT     timestamp   DEFAULT NULL,
     UPDATED_BY     varchar(60) DEFAULT NULL
+);
+
+create table if not exists ACCOUNT_USER_MAPPING
+(
+    ACCOUNT_ID UUID not null,
+    USERS      UUID not null,
+    constraint FK_ACCOUNT_USER_MAPPING
+        FOREIGN KEY (ACCOUNT_ID)
+            REFERENCES ACCOUNT (ID)
 );
 
 create table if not exists BALANCE
