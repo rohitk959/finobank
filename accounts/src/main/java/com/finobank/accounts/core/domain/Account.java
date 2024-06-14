@@ -15,9 +15,9 @@ public class Account {
     private String accountNumber;
     private List<Balance> balances;
     private AccountStatus status;
-    private List<String> users;
+    private List<UUID> users;
     private LocalDateTime createdAt;
-    private UUID createdBy;
+    private String createdBy;
     private LocalDateTime updatedAt;
-    private UUID updatedBy;
+    private String updatedBy;
 }

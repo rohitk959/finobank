@@ -1,12 +1,25 @@
 package com.finobank.accounts.adapter.database.entity;
 
 import com.finobank.accounts.core.domain.AccountStatus;
-import jakarta.persistence.*;
-import lombok.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -15,10 +28,11 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Entity
-@Table(name = "account")
 @Getter
 @Setter
+@Entity
+@Table(name = "account")
+@EntityListeners(AuditingEntityListener.class)
 public class AccountEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -36,9 +50,8 @@ public class AccountEntity {
     @Column(name = "STATUS")
     private AccountStatus status;
 
-    @ElementCollection
-    @Column(name = "USERS", columnDefinition = "UUID[]")
-    private List<UUID> users;
+    @Column(name = "users")
+    private String users;
 
     @CreatedDate
     @Column(name = "CREATED_AT", nullable = false)
@@ -46,7 +59,7 @@ public class AccountEntity {
 
     @CreatedBy
     @Column(name = "CREATED_BY", nullable = false)
-    private UUID createdBy;
+    private String createdBy;
 
     @LastModifiedDate
     @Column(name = "UPDATED_AT")
@@ -54,5 +67,5 @@ public class AccountEntity {
 
     @LastModifiedBy
     @Column(name = "UPDATED_BY")
-    private UUID updatedBy;
+    private String updatedBy;
 }

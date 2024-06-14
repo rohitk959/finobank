@@ -16,6 +16,7 @@ components:
       properties:
         id:
           type: string
+          format: uuid
         accountNumber:
           type: string
         accountName:
