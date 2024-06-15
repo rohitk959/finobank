@@ -1,7 +1,9 @@
 package com.finobank.users.core.config;
 
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.Ordered;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -21,6 +23,12 @@ public class SecurityConfig {
             "/v2/api-docs/**",
             "/swagger-resources/**"};
 
+    private final OAuth2TokenFilter oAuth2TokenFilter;
+
+    public SecurityConfig(OAuth2TokenFilter oAuth2TokenFilter) {
+        this.oAuth2TokenFilter = oAuth2TokenFilter;
+    }
+
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
@@ -34,5 +42,16 @@ public class SecurityConfig {
                 .oauth2ResourceServer(oAuth2 -> oAuth2.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter)))
                 .sessionManagement(ses -> ses.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         return http.build();
+    }
+
+    @Bean
+    public FilterRegistrationBean<OAuth2TokenFilter> loggingFilter() {
+        FilterRegistrationBean<OAuth2TokenFilter> registrationBean = new FilterRegistrationBean<>();
+
+        registrationBean.setFilter(oAuth2TokenFilter);
+        registrationBean.addUrlPatterns("/*");
+        registrationBean.setOrder(Ordered.LOWEST_PRECEDENCE);
+
+        return registrationBean;
     }
 }

@@ -15,20 +15,46 @@ paths:
       summary: Get all users
       description: Get all users information
       operationId: getUsers
+      parameters:
+        - in: query
+          name: userIds
+          description: List of user ids to fetch
+          required: false
+          schema:
+            type: array
+            default: [ ]
+            items:
+              type: string
+              format: uuid
       responses:
         '200':
           description: Success
           content:
             application/json:
               schema:
-                type: string
+                type: array
+                items:
+                  $ref: '../shared-components/shared-spec.yaml#/components/schemas/ApiUser'
         '400':
           description: Invalid request
-
-components:
-  schemas:
-    ApiPayments:
-      type: object
-      properties:
-        id:
-          type: string
+    post:
+      tags:
+        - Users
+      summary: Create user
+      description: Create a user with respect to keycload userId
+      operationId: createUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '../shared-components/shared-spec.yaml#/components/schemas/ApiUser'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../shared-components/shared-spec.yaml#/components/schemas/ApiUser'
+        '400':
+          description: Invalid request

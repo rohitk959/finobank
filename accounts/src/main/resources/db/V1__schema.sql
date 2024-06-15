@@ -1,4 +1,4 @@
-create table if not exists ACCOUNT
+create table if not exists T_ACCOUNT
 (
     ID             uuid PRIMARY KEY,
     ACCOUNT_NAME   varchar(100) NOT NULL,
@@ -10,16 +10,16 @@ create table if not exists ACCOUNT
     UPDATED_BY     varchar(60) DEFAULT NULL
 );
 
-create table if not exists ACCOUNT_USER_MAPPING
+create table if not exists T_ACCOUNT_USER_MAPPING
 (
     ACCOUNT_ID UUID not null,
     USERS      UUID not null,
     constraint FK_ACCOUNT_USER_MAPPING
         FOREIGN KEY (ACCOUNT_ID)
-            REFERENCES ACCOUNT (ID)
+            REFERENCES T_ACCOUNT (ID)
 );
 
-create table if not exists BALANCE
+create table if not exists T_BALANCE
 (
     ID         uuid PRIMARY KEY,
     ACCOUNT_ID uuid        not null,
@@ -30,5 +30,5 @@ create table if not exists BALANCE
     CREATED_BY varchar(60) NOT NULL,
     CONSTRAINT FK_BALANCE_ACCOUNT_ID
         FOREIGN KEY (ACCOUNT_ID)
-            REFERENCES ACCOUNT (ID)
+            REFERENCES T_ACCOUNT (ID)
 )

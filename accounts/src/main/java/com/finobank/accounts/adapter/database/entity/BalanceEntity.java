@@ -17,7 +17,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @Entity
-@Table(name = "balance")
+@Table(name = "T_BALANCE")
 @EntityListeners(AuditingEntityListener.class)
 public class BalanceEntity {
     @Id

@@ -20,7 +20,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @Entity
-@Table(name = "ACCOUNT")
+@Table(name = "T_ACCOUNT")
 @EntityListeners(AuditingEntityListener.class)
 public class AccountEntity {
     @Id
@@ -41,7 +41,7 @@ public class AccountEntity {
     private AccountStatus status;
 
     @ElementCollection
-    @CollectionTable(name = "ACCOUNT_USER_MAPPING", joinColumns = @JoinColumn(name = "ACCOUNT_ID"))
+    @CollectionTable(name = "T_ACCOUNT_USER_MAPPING", joinColumns = @JoinColumn(name = "ACCOUNT_ID"))
     @Column(name = "users")
     private Set<UUID> users;
 
