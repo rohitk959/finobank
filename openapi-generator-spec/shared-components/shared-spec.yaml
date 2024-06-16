@@ -45,15 +45,56 @@ components:
           format: uuid
         amount:
           type: number
+          minimum: 0
+        creationDate:
+          type: string
+          format: date-time
         currency:
           type: string
         type:
           $ref: '#/components/schemas/ApiBalanceType'
 
+    ApiBalanceEntry:
+      enum:
+        - CREDIT
+        - DEBIT
+
     ApiBalanceType:
       enum:
         - AVAILABLE
         - END_OF_DAY
+
+    ApiPayment:
+      type: object
+      required:
+        - amount
+        - currency
+        - giverAccountNumber
+        - beneficiaryAccountNumber
+      properties:
+        id:
+          type: string
+          format: uuid
+        amount:
+          type: number
+          minimum: 0
+        currency:
+          type: string
+        giverAccountNumber:
+          type: string
+        beneficiaryAccountNumber:
+          type: string
+        communication:
+          type: string
+        creationDate:
+          type: string
+          format: date-time
+        status:
+          $ref: '#/components/schemas/ApiPaymentStatus'
+
+    ApiPaymentStatus:
+      enum:
+        - EXECUTED
 
     ApiUser:
       type: object

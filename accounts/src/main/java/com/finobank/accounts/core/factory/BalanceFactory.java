@@ -8,6 +8,9 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -18,6 +21,7 @@ public class BalanceFactory {
         return Balance.builder()
                 .id(balance.getId())
                 .amount(balance.getAmount())
+                .createdAt(toLocalDateTime(balance.getCreationDate()))
                 .currency(balance.getCurrency())
                 .type(BalanceType.fromValue(balance.getType().getValue()))
                 .build();
@@ -34,6 +38,13 @@ public class BalanceFactory {
                 .toList();
     }
 
+    private static LocalDateTime toLocalDateTime(OffsetDateTime creationDate) {
+        if (creationDate == null) {
+            return null;
+        }
+        return creationDate.toLocalDateTime();
+    }
+
     public static Balance init() {
         return Balance.builder()
                 .amount(BigDecimal.ZERO)
@@ -46,6 +57,7 @@ public class BalanceFactory {
         return ApiBalance.builder()
                 .id(balance.getId())
                 .amount(balance.getAmount())
+                .creationDate(toOffsetDateTime(balance.getCreatedAt()))
                 .currency(balance.getCurrency())
                 .type(ApiBalanceType.fromValue(balance.getType().getValue()))
                 .build();
@@ -60,5 +72,9 @@ public class BalanceFactory {
         return balances.stream()
                 .map(BalanceFactory::api)
                 .toList();
+    }
+
+    private static OffsetDateTime toOffsetDateTime(LocalDateTime createdAt) {
+        return createdAt.atOffset(ZoneOffset.UTC);
     }
 }

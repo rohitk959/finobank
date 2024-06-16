@@ -8,27 +8,60 @@ servers:
   - url: api/v1
 
 paths:
-  /payments:
+  /payments/{accountNumber}:
     get:
       tags:
         - Payments
       summary: Get all payments
       description: Get all payments information
       operationId: getPayments
+      parameters:
+        - in: path
+          name: accountNumber
+          description: IBAN number for which all the payments have to be listed
+          required: true
+          schema:
+            type: string
       responses:
         '200':
           description: Success
           content:
             application/json:
               schema:
-                type: string
+                type: array
+                items:
+                  $ref: '../shared-components/shared-spec.yaml#/components/schemas/ApiPayment'
+        '400':
+          description: Invalid request
+
+  /payments:
+    post:
+      tags:
+        - Payments
+      summary: Create a payment
+      description: Make a payment from giver account to beneficiary account
+      operationId: makePayment
+      requestBody:
+        description: Payment details which includes giver and beneficiary account details along with amount
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '../shared-components/shared-spec.yaml#/components/schemas/ApiPayment'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../shared-components/shared-spec.yaml#/components/schemas/ApiPayment'
         '400':
           description: Invalid request
 
 components:
   schemas:
-    ApiPayments:
-      type: object
-      properties:
-        id:
-          type: string
+    ApiAccount:
+      $ref: '../shared-components/shared-spec.yaml#/components/schemas/ApiAccount'
+
+    ApiBalanceEntry:
+      $ref: '../shared-components/shared-spec.yaml#/components/schemas/ApiBalanceEntry'

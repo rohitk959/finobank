@@ -15,5 +15,5 @@ public class Balance {
     private String currency;
     private BalanceType type;
     private LocalDateTime createdAt;
-    private UUID createdBy;
+    private String createdBy;
 }

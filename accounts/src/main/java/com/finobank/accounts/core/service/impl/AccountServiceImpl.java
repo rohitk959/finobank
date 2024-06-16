@@ -6,6 +6,8 @@ import com.finobank.accounts.adapter.database.repository.AccountRepository;
 import com.finobank.accounts.adapter.feignclients.UsersFeignClient;
 import com.finobank.accounts.core.domain.Account;
 import com.finobank.accounts.core.domain.AccountStatus;
+import com.finobank.accounts.core.domain.Balance;
+import com.finobank.accounts.core.exception.ApplicationEntityNotFoundException;
 import com.finobank.accounts.core.factory.AccountFactory;
 import com.finobank.accounts.core.factory.BalanceFactory;
 import com.finobank.accounts.core.model.ApiAccount;
@@ -18,10 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @AllArgsConstructor
 @Service
@@ -55,8 +54,27 @@ public class AccountServiceImpl implements AccountService {
 
         return accountEntities.stream()
                 .map(DbAccountFactory::fromEntity)
+                .peek(account -> account.setBalances(account.getBalances().stream()
+                        .sorted(Comparator.comparing(Balance::getCreatedBy).reversed())
+                        .toList()))
                 .map(this::fetchUsers)
                 .toList();
+    }
+
+    @Override
+    public ApiAccount getAccountDetails(String accountNumber) {
+        Optional<AccountEntity> account = accountRepository.findByAccountNumber(accountNumber);
+
+        if (account.isEmpty()) {
+            throw new ApplicationEntityNotFoundException(accountNumber);
+        }
+
+        Account coreAccount = DbAccountFactory.fromEntity(account.get());
+        coreAccount.setBalances(coreAccount.getBalances().stream()
+                .sorted(Comparator.comparing(Balance::getCreatedBy).reversed())
+                .toList());
+
+        return AccountFactory.api(coreAccount);
     }
 
     private ApiAccount fetchUsers(Account coreAccount) {

@@ -14,6 +14,8 @@ public class DbBalanceFactory {
         return BalanceEntity.builder()
                 .id(balance.getId())
                 .amount(balance.getAmount())
+                .createdAt(balance.getCreatedAt())
+                .createdBy(balance.getCreatedBy())
                 .currency(balance.getCurrency())
                 .type(balance.getType())
                 .build();
@@ -33,6 +35,8 @@ public class DbBalanceFactory {
         return Balance.builder()
                 .id(balance.getId())
                 .amount(balance.getAmount())
+                .createdAt(balance.getCreatedAt())
+                .createdBy(balance.getCreatedBy())
                 .currency(balance.getCurrency())
                 .type(balance.getType())
                 .build();

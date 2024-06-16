@@ -18,7 +18,7 @@ public class AccountFactory {
                 .accountName(account.getAccountName())
                 .accountNumber(account.getAccountNumber())
                 .id(account.getId())
-                .balances(BalanceFactory.core(account.getBalance()))
+                .balances(BalanceFactory.core(account.getBalances()))
                 .status(status(account.getStatus()))
                 .users(users(account))
                 .build();
@@ -42,7 +42,7 @@ public class AccountFactory {
                 .accountName(account.getAccountName())
                 .accountNumber(account.getAccountNumber())
                 .id(account.getId())
-                .balance(BalanceFactory.api(account.getBalances()))
+                .balances(BalanceFactory.api(account.getBalances()))
                 .status(status(account.getStatus()))
                 .build();
     }

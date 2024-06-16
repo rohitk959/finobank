@@ -8,4 +8,6 @@ public interface AccountService {
     ApiAccount createAccount(ApiAccount account);
 
     List<ApiAccount> findAccounts();
+
+    ApiAccount getAccountDetails(String accountNumber);
 }

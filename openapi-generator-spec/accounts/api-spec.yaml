@@ -47,3 +47,64 @@ paths:
                 $ref: '../shared-components/shared-spec.yaml#/components/schemas/ApiAccount'
         '400':
           description: Invalid request
+
+  /accounts/{accountNumber}:
+    get:
+      tags:
+        - Accounts
+      summary: Get details of specified account number
+      description: Get details of specified account number
+      operationId: getAccountDetails
+      parameters:
+        - in: path
+          name: accountNumber
+          required: true
+          description: account number for which details have to be fetched
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../shared-components/shared-spec.yaml#/components/schemas/ApiAccount'
+        '400':
+          description: Invalid request
+
+  /accounts//balances/{balanceEntry}/{accountNumber}:
+    put:
+      tags:
+        - Balances
+      summary: Updates account balance
+      description: Credit/Debit from the specified account number
+      operationId: updateBalance
+      parameters:
+        - in: path
+          name: balanceEntry
+          required: true
+          description: Type of entry debit/credit
+          schema:
+            $ref: '../shared-components/shared-spec.yaml#/components/schemas/ApiBalanceEntry'
+        - in: path
+          name: accountNumber
+          required: true
+          description: Account number from which the balance has to be debited/credited
+          schema:
+            type: string
+      requestBody:
+        description: Balance amount that is to be debited/credited
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '../shared-components/shared-spec.yaml#/components/schemas/ApiBalance'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../shared-components/shared-spec.yaml#/components/schemas/ApiBalance'
+        '400':
+          description: Invalid request
