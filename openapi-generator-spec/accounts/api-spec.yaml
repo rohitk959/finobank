@@ -72,7 +72,7 @@ paths:
         '400':
           description: Invalid request
 
-  /accounts//balances/{balanceEntry}/{accountNumber}:
+  /accounts/balances/{balanceEntry}/{accountNumber}:
     put:
       tags:
         - Balances
