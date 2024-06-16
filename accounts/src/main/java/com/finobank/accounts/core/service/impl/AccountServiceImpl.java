@@ -4,9 +4,11 @@ import com.finobank.accounts.adapter.database.entity.AccountEntity;
 import com.finobank.accounts.adapter.database.factory.DbAccountFactory;
 import com.finobank.accounts.adapter.database.repository.AccountRepository;
 import com.finobank.accounts.adapter.feignclients.UsersFeignClient;
+import com.finobank.accounts.adapter.thirdparty.IbanValidator;
 import com.finobank.accounts.core.domain.Account;
 import com.finobank.accounts.core.domain.AccountStatus;
 import com.finobank.accounts.core.domain.Balance;
+import com.finobank.accounts.core.exception.ApplicationBadRequestException;
 import com.finobank.accounts.core.exception.ApplicationEntityNotFoundException;
 import com.finobank.accounts.core.factory.AccountFactory;
 import com.finobank.accounts.core.factory.BalanceFactory;
@@ -22,16 +24,23 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 
+import static com.finobank.accounts.core.exception.ApplicationBaseException.CODE_FAILURE;
+
 @AllArgsConstructor
 @Service
 public class AccountServiceImpl implements AccountService {
     private final AccountRepository accountRepository;
     private final UsersFeignClient usersFeignClient;
+    private final IbanValidator ibanValidator;
 
     @Override
     @Transactional
     public ApiAccount createAccount(ApiAccount account) {
         UUID userId = UUID.fromString(SecurityContextHolder.getContext().getAuthentication().getName());
+
+        if (!ibanValidator.isValid(account.getAccountNumber())) {
+            throw new ApplicationBadRequestException(CODE_FAILURE, "Invalid iban number");
+        }
 
         Account coreAccount = AccountFactory.core(account)
                 .setBalances(List.of(BalanceFactory.init()))
@@ -63,6 +72,10 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public ApiAccount getAccountDetails(String accountNumber) {
+        if (!ibanValidator.isValid(accountNumber)) {
+            throw new ApplicationBadRequestException(CODE_FAILURE, "Invalid iban number");
+        }
+
         Optional<AccountEntity> account = accountRepository.findByAccountNumber(accountNumber);
 
         if (account.isEmpty()) {
