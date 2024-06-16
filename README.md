@@ -74,6 +74,13 @@ To access keycloak server [click here](http://localhost:8060/)
 - username: **admin**
 - password: **admin**
 
+### postman
+
+This tool is used to call application endpoints. Please download and install
+from [here](https://www.postman.com/downloads/). After successful installation. Please import all the endpoints
+configuration from postman folder. The postman configuration configures keycloak authentication endpoints and all the
+application endpoints.
+
 ## Features implemented
 
 ### Main requirements
