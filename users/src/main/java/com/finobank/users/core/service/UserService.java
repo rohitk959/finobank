@@ -9,4 +9,6 @@ public interface UserService {
     ApiUser createUser(ApiUser apiUser);
 
     List<ApiUser> getUsers(List<UUID> userIds);
+
+    ApiUser updateUser(ApiUser apiUser);
 }

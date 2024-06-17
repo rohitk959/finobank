@@ -1,6 +1,11 @@
 package com.finobank.payments.core.service.helper;
 
+import com.finobank.payments.adapter.database.entity.PaymentEntity;
+import com.finobank.payments.adapter.database.factory.DbPaymentFactory;
+import com.finobank.payments.adapter.database.repository.PaymentRepository;
 import com.finobank.payments.adapter.feignClients.AccountsFeignClient;
+import com.finobank.payments.core.domain.Payment;
+import com.finobank.payments.core.domain.PaymentStatus;
 import com.finobank.payments.core.exception.ApplicationBadRequestException;
 import com.finobank.payments.core.exception.ApplicationBaseException;
 import com.finobank.payments.core.model.ApiAccount;
@@ -20,8 +25,9 @@ import static com.finobank.payments.core.exception.ApplicationBaseException.CODE
 @Component
 public class PaymentServiceHelper {
     private final AccountsFeignClient accountsFeignClient;
+    private final PaymentRepository paymentRepository;
 
-    public void debitGiverAccount(ApiPayment payment, ApiBalance balance) {
+    public void debitGiverAccount(Payment payment, ApiBalance balance) {
         ResponseEntity<ApiBalance> debitResponse = accountsFeignClient.updateBalance(ApiBalanceEntry.DEBIT, payment.getGiverAccountNumber(), balance);
 
         if (!debitResponse.getStatusCode().is2xxSuccessful()) {
@@ -31,7 +37,7 @@ public class PaymentServiceHelper {
         }
     }
 
-    public void creditBeneficiaryAccount(ApiPayment payment, ApiBalance balance) {
+    public void creditBeneficiaryAccount(Payment payment, ApiBalance balance) {
         try {
             ResponseEntity<ApiAccount> beneficiaryAccount = accountsFeignClient.getAccountDetails(payment.getBeneficiaryAccountNumber());
 
@@ -57,5 +63,21 @@ public class PaymentServiceHelper {
     public void preparePayment(ApiPayment payment) {
         payment.setCurrency("EUR");
         payment.setStatus(ApiPaymentStatus.EXECUTED);
+        payment.setFraudulentTransaction(false);
+    }
+
+    public void checkAndBlockAccount(Payment payment) {
+        payment.setFraudulentTransaction(true);
+        payment.setStatus(PaymentStatus.BLOCKED);
+        List<PaymentEntity> payments = paymentRepository.findAllByGiverAccountNumberAndFraudulentTransactionTrue(payment.getGiverAccountNumber());
+
+        if (payments.size() < 5) {
+            return;
+        }
+
+        paymentRepository.save(DbPaymentFactory.toEntity(payment));
+        accountsFeignClient.blockAccount(payment.getGiverAccountNumber());
+
+        throw new ApplicationBadRequestException(CODE_FAILURE, "Giver account blocked.");
     }
 }

@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "a6ed4db6-4a2a-4330-8484-c34aa715d195",
-		"name": "Finobank-V2",
+		"_postman_id": "102409c6-bf71-462c-b1be-14729d39d3be",
+		"name": "Finobank",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "1222776"
+		"_exporter_id": "34392919"
 	},
 	"item": [
 		{
@@ -85,6 +85,33 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Block account",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/accounts/block/:accountNumber",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"accounts",
+								"block",
+								":accountNumber"
+							],
+							"variable": [
+								{
+									"key": "accountNumber",
+									"value": "LU983414420027839700"
+								}
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -124,6 +151,34 @@
 					"request": {
 						"method": "GET",
 						"header": [],
+						"url": {
+							"raw": "http://localhost:8082/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update user address",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"address\": \"11 Av. Monterey 10, 1660 Ville-Haute Luxembourg\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
 							"raw": "http://localhost:8082/users",
 							"protocol": "http",
@@ -189,6 +244,32 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Delete payment",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/payments/:paymentId",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"payments",
+								":paymentId"
+							],
+							"variable": [
+								{
+									"key": "paymentId",
+									"value": "92fc919a-c31b-424c-898b-d57bb70c2711"
+								}
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -196,10 +277,48 @@
 			"name": "gateway",
 			"item": [
 				{
-					"name": "List all accounts",
+					"name": "Create User",
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"address\": \"10 Av. Monterey 10, 1660 Ville-Haute Luxembourg\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8072/finobank/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8072",
+							"path": [
+								"finobank",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create account",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"accountNumber\": \"LU983414420027839700\",\r\n    \"accountName\": \"Savings account\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
 							"raw": "http://localhost:8072/finobank/accounts",
 							"protocol": "http",
@@ -216,19 +335,10 @@
 					"response": []
 				},
 				{
-					"name": "Create account",
+					"name": "List all accounts",
 					"request": {
-						"method": "POST",
+						"method": "GET",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"accountNumber\": \"ABCDE\",\r\n    \"accountName\": \"ABCdE\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
 						"url": {
 							"raw": "http://localhost:8072/finobank/accounts",
 							"protocol": "http",
@@ -259,7 +369,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8072/finobank/accounts//balances/CREDIT/12345",
+							"raw": "http://localhost:8072/finobank/accounts//balances/CREDIT/LU983414420027839700",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -271,20 +381,20 @@
 								"",
 								"balances",
 								"CREDIT",
-								"12345"
+								"LU983414420027839700"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Create User",
+					"name": "Create payment",
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"address\": \"Test address\"\r\n}",
+							"raw": "{\r\n    \"amount\": 1.0,\r\n    \"currency\": \"EUR\",\r\n    \"giverAccountNumber\": \"LU983414420027839700\",\r\n    \"beneficiaryAccountNumber\": \"LU280019400644750000\",\r\n    \"communication\": \"1st Test\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -292,7 +402,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8072/finobank/users",
+							"raw": "http://localhost:8072/finobank/payments",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -300,7 +410,61 @@
 							"port": "8072",
 							"path": [
 								"finobank",
-								"users"
+								"payments"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List all payments",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8072/finobank/payments/:accountNumber",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8072",
+							"path": [
+								"finobank",
+								"payments",
+								":accountNumber"
+							],
+							"variable": [
+								{
+									"key": "accountNumber",
+									"value": "LU983414420027839700"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete payment",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8072/finobank/payments/:paymentId",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8072",
+							"path": [
+								"finobank",
+								"payments",
+								":paymentId"
+							],
+							"variable": [
+								{
+									"key": "paymentId",
+									"value": "92fc919a-c31b-424c-898b-d57bb70c2711"
+								}
 							]
 						}
 					},
@@ -327,13 +491,40 @@
 					"response": []
 				},
 				{
-					"name": "Create payment",
+					"name": "Block account",
 					"request": {
-						"method": "POST",
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8072/accounts/block/:accountNumber",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8072",
+							"path": [
+								"accounts",
+								"block",
+								":accountNumber"
+							],
+							"variable": [
+								{
+									"key": "accountNumber",
+									"value": "LU983414420027839700"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update user address Copy",
+					"request": {
+						"method": "PUT",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"amount\": 1.0,\r\n    \"currency\": \"EUR\",\r\n    \"giverAccountNumber\": \"12345\",\r\n    \"beneficiaryAccountNumber\": \"23456\",\r\n    \"communication\": \"1st Test\"\r\n}",
+							"raw": "{\r\n    \"address\": \"10 Av. Monterey 10, 1660 Ville-Haute Luxembourg\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -341,26 +532,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8072/payments",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8072",
-							"path": [
-								"payments"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "List all payments",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8072/finobank/payments",
+							"raw": "http://localhost:8072/finobank/users",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -368,7 +540,7 @@
 							"port": "8072",
 							"path": [
 								"finobank",
-								"payments"
+								"users"
 							]
 						}
 					},

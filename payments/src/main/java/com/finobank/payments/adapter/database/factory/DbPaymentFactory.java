@@ -15,6 +15,7 @@ public class DbPaymentFactory {
                 .communication(payment.getCommunication())
                 .createdAt(payment.getCreationDate())
                 .currency(payment.getCurrency())
+                .fraudulentTransaction(payment.getFraudulentTransaction())
                 .giverAccountNumber(payment.getGiverAccountNumber())
                 .status(payment.getStatus())
                 .build();
@@ -28,6 +29,7 @@ public class DbPaymentFactory {
                 .communication(payment.getCommunication())
                 .creationDate(payment.getCreatedAt())
                 .currency(payment.getCurrency())
+                .fraudulentTransaction(payment.getFraudulentTransaction())
                 .giverAccountNumber(payment.getGiverAccountNumber())
                 .status(payment.getStatus())
                 .build();

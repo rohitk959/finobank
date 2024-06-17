@@ -7,7 +7,6 @@ import com.finobank.accounts.adapter.feignclients.UsersFeignClient;
 import com.finobank.accounts.adapter.thirdparty.IbanValidator;
 import com.finobank.accounts.core.domain.Account;
 import com.finobank.accounts.core.domain.AccountStatus;
-import com.finobank.accounts.core.domain.Balance;
 import com.finobank.accounts.core.exception.ApplicationBadRequestException;
 import com.finobank.accounts.core.exception.ApplicationEntityNotFoundException;
 import com.finobank.accounts.core.factory.AccountFactory;
@@ -22,7 +21,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
 
 import static com.finobank.accounts.core.exception.ApplicationBaseException.CODE_FAILURE;
 
@@ -63,9 +66,6 @@ public class AccountServiceImpl implements AccountService {
 
         return accountEntities.stream()
                 .map(DbAccountFactory::fromEntity)
-                .peek(account -> account.setBalances(account.getBalances().stream()
-                        .sorted(Comparator.comparing(Balance::getCreatedBy).reversed())
-                        .toList()))
                 .map(this::fetchUsers)
                 .toList();
     }
@@ -83,11 +83,26 @@ public class AccountServiceImpl implements AccountService {
         }
 
         Account coreAccount = DbAccountFactory.fromEntity(account.get());
-        coreAccount.setBalances(coreAccount.getBalances().stream()
-                .sorted(Comparator.comparing(Balance::getCreatedBy).reversed())
-                .toList());
 
         return AccountFactory.api(coreAccount);
+    }
+
+    @Override
+    public ApiAccount blockAccount(String accountNumber) {
+        if (!ibanValidator.isValid(accountNumber)) {
+            throw new ApplicationBadRequestException(CODE_FAILURE, "Invalid iban number");
+        }
+
+        Optional<AccountEntity> account = accountRepository.findByAccountNumber(accountNumber);
+
+        if (account.isEmpty()) {
+            throw new ApplicationEntityNotFoundException(accountNumber);
+        }
+
+        account.get().setStatus(AccountStatus.BLOCKED);
+        AccountEntity savedAccount = accountRepository.save(account.get());
+        
+        return AccountFactory.api(DbAccountFactory.fromEntity(savedAccount));
     }
 
     private ApiAccount fetchUsers(Account coreAccount) {

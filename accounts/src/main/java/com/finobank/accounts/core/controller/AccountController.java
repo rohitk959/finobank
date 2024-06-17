@@ -41,6 +41,12 @@ public class AccountController implements AccountsApi {
     }
 
     @Override
+    public ResponseEntity<ApiAccount> blockAccount(String accountNumber) {
+        ApiAccount account = accountService.blockAccount(accountNumber);
+        return ResponseEntity.ok(account);
+    }
+
+    @Override
     public ResponseEntity<ApiBalance> updateBalance(ApiBalanceEntry balanceEntry, String accountNumber, ApiBalance apiBalance) {
         ApiBalance endOfDayBalance = balanceService.updateBalance(balanceEntry, accountNumber, apiBalance);
         return ResponseEntity.status(HttpStatus.CREATED).body(endOfDayBalance);

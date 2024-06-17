@@ -11,9 +11,11 @@ import com.finobank.users.database.factory.DbUserFactory;
 import com.finobank.users.database.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -50,5 +52,19 @@ public class UserServiceImpl implements UserService {
                 .map(DbUserFactory::fromEntity)
                 .map(UserFactory::api)
                 .toList();
+    }
+
+    @Override
+    @Transactional
+    public ApiUser updateUser(ApiUser apiUser) {
+        Optional<UserEntity> user = userRepository.findById(TokenMetaData.getUserId());
+
+        if (user.isEmpty()) {
+            throw new ApplicationEntityNotFoundException(TokenMetaData.getUserId());
+        }
+
+        user.get().setAddress(apiUser.getAddress());
+        User saveduser = DbUserFactory.fromEntity(userRepository.save(user.get()));
+        return UserFactory.api(saveduser);
     }
 }

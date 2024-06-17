@@ -10,4 +10,6 @@ public interface AccountService {
     List<ApiAccount> findAccounts();
 
     ApiAccount getAccountDetails(String accountNumber);
+
+    ApiAccount blockAccount(String accountNumber);
 }

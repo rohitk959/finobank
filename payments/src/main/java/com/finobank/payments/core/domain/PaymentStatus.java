@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public enum PaymentStatus {
+    BLOCKED("BLOCKED"),
     EXECUTED("EXECUTED");
 
     private final String value;

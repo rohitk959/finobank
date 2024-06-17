@@ -58,3 +58,24 @@ paths:
                 $ref: '../shared-components/shared-spec.yaml#/components/schemas/ApiUser'
         '400':
           description: Invalid request
+    put:
+      tags:
+        - Users
+      summary: Update user
+      description: Udpdate user address only in database and not in keycloak
+      operationId: updateUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '../shared-components/shared-spec.yaml#/components/schemas/ApiUser'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../shared-components/shared-spec.yaml#/components/schemas/ApiUser'
+        '400':
+          description: Invalid request

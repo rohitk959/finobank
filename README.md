@@ -50,6 +50,15 @@ at https://hub.docker.com/u/rohitkalaghatkar
 
 ## Configuration:
 
+### Application users
+
+- username: user1@finobank.com\
+  password: **password**
+- username: user2@finobank.com\
+  password: **password**
+- username: user3@finobank.com\
+  password: **password**
+
 ### Database
 
 All Postgres RDBMS database are configured to use below credentials:
@@ -59,7 +68,7 @@ All Postgres RDBMS database are configured to use below credentials:
 
 ### Swagger UI
 
-There exists a bug to access swagger ui from gateway
+There exists a know bug in application to access swagger ui from gateway
 server [Accounts Gateway swagger ui](http://localhost:8072/docs/accounts/swagger-ui/index.html) URI. Instead, please use
 swagger ui for individual microservices.
 
@@ -83,7 +92,7 @@ application endpoints.
 
 ## Features implemented
 
-### Main requirements
+### Main requirements implemented
 
 - Authentication using keycloak IAM service
 - List the bank accounts for authenticated user
@@ -92,7 +101,10 @@ application endpoints.
 - Delete a payment by ID
 - Logout endpoint -- Not implemented
 
-### Optional requirements
+### Optional requirements implemented
 
+- Execute payment in single transaction -- Not implemented
+- Pagination - Not implemented
+- Fraud detection and block in case of more then 5 fraud payments
 - Dockerized entire application
 - Implemented OpenApi and Swagger documentation for microservices

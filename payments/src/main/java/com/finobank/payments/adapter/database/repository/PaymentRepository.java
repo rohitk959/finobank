@@ -10,4 +10,6 @@ import java.util.UUID;
 @Repository
 public interface PaymentRepository extends JpaRepository<PaymentEntity, UUID> {
     List<PaymentEntity> findAllByGiverAccountNumber(String accountNumber);
+
+    List<PaymentEntity> findAllByGiverAccountNumberAndFraudulentTransactionTrue(String accountNumber);
 }

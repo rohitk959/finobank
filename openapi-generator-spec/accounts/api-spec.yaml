@@ -108,3 +108,27 @@ paths:
                 $ref: '../shared-components/shared-spec.yaml#/components/schemas/ApiBalance'
         '400':
           description: Invalid request
+
+  /accounts/block/{accountNumber}:
+    put:
+      tags:
+        - Accounts
+      summary: Block given account number
+      description: Block given account number
+      operationId: blockAccount
+      parameters:
+        - in: path
+          name: accountNumber
+          required: true
+          description: account number which needs to be blocked
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../shared-components/shared-spec.yaml#/components/schemas/ApiAccount'
+        '400':
+          description: Invalid request

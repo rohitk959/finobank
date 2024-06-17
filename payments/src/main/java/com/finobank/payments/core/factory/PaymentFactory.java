@@ -21,6 +21,7 @@ public class PaymentFactory {
                 .communication(payment.getCommunication())
                 .creationDate(toOffsetDateTime(payment.getCreationDate()))
                 .currency(payment.getCurrency())
+                .fraudulentTransaction(payment.getFraudulentTransaction())
                 .giverAccountNumber(payment.getGiverAccountNumber())
                 .status(getStatus(payment.getStatus()))
                 .build();
@@ -45,6 +46,7 @@ public class PaymentFactory {
                 .communication(payment.getCommunication())
                 .creationDate(toLocalDateTime(payment.getCreationDate()))
                 .currency(payment.getCurrency())
+                .fraudulentTransaction(payment.getFraudulentTransaction())
                 .giverAccountNumber(payment.getGiverAccountNumber())
                 .status(getStatus(payment.getStatus()))
                 .build();

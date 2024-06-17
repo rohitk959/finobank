@@ -52,11 +52,16 @@ public class PaymentServiceImpl implements PaymentService {
                 .amount(payment.getAmount())
                 .build();
 
-        paymentServiceHelper.debitGiverAccount(payment, balance);
-
-        paymentServiceHelper.creditBeneficiaryAccount(payment, balance);
-
         Payment paymentCore = PaymentFactory.core(payment);
+
+        if (paymentValidator.checkIfValidAccount(payment.getBeneficiaryAccountNumber())) {
+            paymentServiceHelper.debitGiverAccount(paymentCore, balance);
+            paymentServiceHelper.creditBeneficiaryAccount(paymentCore, balance);
+            paymentCore.setFraudulentTransaction(false);
+        } else {
+            paymentServiceHelper.checkAndBlockAccount(paymentCore);
+        }
+
         PaymentEntity savedPayment = paymentRepository.save(DbPaymentFactory.toEntity(paymentCore));
 
         return PaymentFactory.api(DbPaymentFactory.fromEntity(savedPayment));

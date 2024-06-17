@@ -89,11 +89,14 @@ components:
         creationDate:
           type: string
           format: date-time
+        fraudulentTransaction:
+          type: boolean
         status:
           $ref: '#/components/schemas/ApiPaymentStatus'
 
     ApiPaymentStatus:
       enum:
+        - BLOCKED
         - EXECUTED
 
     ApiUser:

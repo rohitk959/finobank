@@ -21,9 +21,11 @@ public interface AccountsFeignClient {
     @RequestMapping(method = RequestMethod.GET, value = "/accounts/{accountNumber}", produces = {"application/json"})
     ResponseEntity<ApiAccount> getAccountDetails(@PathVariable("accountNumber") String accountNumber);
 
+    @RequestMapping(method = RequestMethod.PUT, value = "/accounts/block/{accountNumber}", produces = {"application/json"})
+    ResponseEntity<ApiAccount> blockAccount(@PathVariable("accountNumber") String accountNumber);
+
     @RequestMapping(method = RequestMethod.PUT, value = "/accounts/balances/{balanceEntry}/{accountNumber}", produces = {"application/json"}, consumes = {"application/json"})
     ResponseEntity<ApiBalance> updateBalance(@PathVariable("balanceEntry") ApiBalanceEntry balanceEntry,
                                              @PathVariable("accountNumber") String accountNumber,
-                                             @RequestBody ApiBalance apiBalance
-    );
+                                             @RequestBody ApiBalance apiBalance);
 }

@@ -19,5 +19,6 @@ public class Payment {
     private String beneficiaryAccountNumber;
     private String communication;
     private LocalDateTime creationDate;
+    private Boolean fraudulentTransaction;
     private PaymentStatus status;
 }

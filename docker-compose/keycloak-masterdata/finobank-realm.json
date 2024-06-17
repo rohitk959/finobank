@@ -191,7 +191,7 @@
         "composite" : true,
         "composites" : {
           "client" : {
-            "realm-management" : [ "manage-identity-providers", "query-users", "view-authorization", "query-groups", "manage-clients", "manage-events", "view-users", "manage-realm", "manage-authorization", "view-realm", "view-clients", "view-events", "create-client", "manage-users", "query-realms", "view-identity-providers", "query-clients", "impersonation" ]
+            "realm-management" : [ "manage-identity-providers", "query-users", "query-groups", "view-authorization", "manage-clients", "manage-events", "manage-realm", "view-users", "manage-authorization", "view-clients", "view-realm", "view-events", "create-client", "manage-users", "query-realms", "view-identity-providers", "query-clients", "impersonation" ]
           }
         },
         "clientRole" : true,
@@ -415,6 +415,52 @@
     "realmRoles" : [ "default-roles-finobank" ],
     "notBefore" : 0,
     "groups" : [ "/finobank_users" ]
+  }, {
+    "id" : "22a96824-893e-41ff-b5ad-3913ea6599a6",
+    "username" : "user2@finobank.com",
+    "firstName" : "User2",
+    "lastName" : "Finobank",
+    "email" : "user2@finobank.com",
+    "emailVerified" : true,
+    "createdTimestamp" : 1718621351244,
+    "enabled" : true,
+    "totp" : false,
+    "credentials" : [ {
+      "id" : "4cefc95e-48eb-4865-91e9-ef91084d97c7",
+      "type" : "password",
+      "userLabel" : "My password",
+      "createdDate" : 1718621362975,
+      "secretData" : "{\"value\":\"HKBh+lj3LjVhQDhVPQRpjOHe4mYEZOEEbdPVFs7+EMDm2ql+RZBk/I/5xXCmhvhX+B7QMGGwRuizFOXT35TxgQ==\",\"salt\":\"PojyLrHIPYqTl2ykzSoAsA==\",\"additionalParameters\":{}}",
+      "credentialData" : "{\"hashIterations\":210000,\"algorithm\":\"pbkdf2-sha512\",\"additionalParameters\":{}}"
+    } ],
+    "disableableCredentialTypes" : [ ],
+    "requiredActions" : [ ],
+    "realmRoles" : [ "default-roles-finobank" ],
+    "notBefore" : 0,
+    "groups" : [ "/finobank_users" ]
+  }, {
+    "id" : "5690ed7c-0274-406f-9a1d-2fc7b57b524a",
+    "username" : "user3@finobank.com",
+    "firstName" : "User3",
+    "lastName" : "Finobank",
+    "email" : "user3@finobank.com",
+    "emailVerified" : true,
+    "createdTimestamp" : 1718621436219,
+    "enabled" : true,
+    "totp" : false,
+    "credentials" : [ {
+      "id" : "2bde5be7-b9ea-412e-bd5b-bfe18e3a162b",
+      "type" : "password",
+      "userLabel" : "My password",
+      "createdDate" : 1718622800199,
+      "secretData" : "{\"value\":\"lJK7DNnUlE6Pv0tCQUqFhbcoSVUPxYGPgKbsFaZ15C6NoIR4vPKe85HpzLtLoRMcRYc20ahjHdtFcZ8bHegqnA==\",\"salt\":\"P/yTqu2IMg5x18CaSLtzfQ==\",\"additionalParameters\":{}}",
+      "credentialData" : "{\"hashIterations\":210000,\"algorithm\":\"pbkdf2-sha512\",\"additionalParameters\":{}}"
+    } ],
+    "disableableCredentialTypes" : [ ],
+    "requiredActions" : [ ],
+    "realmRoles" : [ "default-roles-finobank" ],
+    "notBefore" : 0,
+    "groups" : [ "/finobank_users" ]
   } ],
   "scopeMappings" : [ {
     "clientScope" : "offline_access",
@@ -515,7 +561,9 @@
     "publicClient" : true,
     "frontchannelLogout" : false,
     "protocol" : "openid-connect",
-    "attributes" : { },
+    "attributes" : {
+      "post.logout.redirect.uris" : "+"
+    },
     "authenticationFlowBindingOverrides" : { },
     "fullScopeAllowed" : false,
     "nodeReRegistrationTimeout" : 0,
@@ -541,7 +589,9 @@
     "publicClient" : false,
     "frontchannelLogout" : false,
     "protocol" : "openid-connect",
-    "attributes" : { },
+    "attributes" : {
+      "post.logout.redirect.uris" : "+"
+    },
     "authenticationFlowBindingOverrides" : { },
     "fullScopeAllowed" : false,
     "nodeReRegistrationTimeout" : 0,
@@ -573,6 +623,7 @@
     "protocol" : "openid-connect",
     "attributes" : {
       "oidc.ciba.grant.enabled" : "false",
+      "post.logout.redirect.uris" : "+",
       "display.on.consent.screen" : "false",
       "oauth2.device.authorization.grant.enabled" : "false",
       "backchannel.logout.session.required" : "true",
@@ -603,7 +654,9 @@
     "publicClient" : false,
     "frontchannelLogout" : false,
     "protocol" : "openid-connect",
-    "attributes" : { },
+    "attributes" : {
+      "post.logout.redirect.uris" : "+"
+    },
     "authenticationFlowBindingOverrides" : { },
     "fullScopeAllowed" : false,
     "nodeReRegistrationTimeout" : 0,
@@ -740,6 +793,7 @@
       "config" : {
         "introspection.token.claim" : "true",
         "multivalued" : "true",
+        "userinfo.token.claim" : "true",
         "user.attribute" : "foo",
         "id.token.claim" : "true",
         "access.token.claim" : "true",
@@ -1095,7 +1149,8 @@
       "config" : {
         "id.token.claim" : "true",
         "introspection.token.claim" : "true",
-        "access.token.claim" : "true"
+        "access.token.claim" : "true",
+        "userinfo.token.claim" : "true"
       }
     } ]
   }, {
@@ -1185,7 +1240,7 @@
       "subType" : "authenticated",
       "subComponents" : { },
       "config" : {
-        "allowed-protocol-mapper-types" : [ "saml-user-attribute-mapper", "oidc-address-mapper", "oidc-usermodel-property-mapper", "saml-role-list-mapper", "saml-user-property-mapper", "oidc-usermodel-attribute-mapper", "oidc-full-name-mapper", "oidc-sha256-pairwise-sub-mapper" ]
+        "allowed-protocol-mapper-types" : [ "saml-user-property-mapper", "oidc-usermodel-attribute-mapper", "oidc-full-name-mapper", "saml-user-attribute-mapper", "oidc-address-mapper", "saml-role-list-mapper", "oidc-sha256-pairwise-sub-mapper", "oidc-usermodel-property-mapper" ]
       }
     }, {
       "id" : "ba0e6ec9-28b4-4b1d-861c-b93ffb49d3c6",
@@ -1236,7 +1291,7 @@
       "subType" : "anonymous",
       "subComponents" : { },
       "config" : {
-        "allowed-protocol-mapper-types" : [ "oidc-sha256-pairwise-sub-mapper", "saml-role-list-mapper", "oidc-full-name-mapper", "saml-user-attribute-mapper", "saml-user-property-mapper", "oidc-usermodel-property-mapper", "oidc-usermodel-attribute-mapper", "oidc-address-mapper" ]
+        "allowed-protocol-mapper-types" : [ "oidc-usermodel-attribute-mapper", "oidc-sha256-pairwise-sub-mapper", "oidc-usermodel-property-mapper", "saml-role-list-mapper", "oidc-full-name-mapper", "saml-user-attribute-mapper", "oidc-address-mapper", "saml-user-property-mapper" ]
       }
     } ],
     "org.keycloak.keys.KeyProvider" : [ {
@@ -1833,8 +1888,8 @@
   "attributes" : {
     "cibaBackchannelTokenDeliveryMode" : "poll",
     "cibaAuthRequestedUserHint" : "login_hint",
-    "oauth2DevicePollingInterval" : "5",
     "clientOfflineSessionMaxLifespan" : "0",
+    "oauth2DevicePollingInterval" : "5",
     "clientSessionIdleTimeout" : "0",
     "actionTokenGeneratedByUserLifespan.verify-email" : "",
     "actionTokenGeneratedByUserLifespan.idp-verify-account-via-email" : "",

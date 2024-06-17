@@ -30,4 +30,11 @@ public class UserController implements UsersApi {
         List<ApiUser> users = userService.getUsers(userIds);
         return ResponseEntity.ok(users);
     }
+
+    @Override
+    @PreAuthorize("hasRole('finobank_user')")
+    public ResponseEntity<ApiUser> updateUser(ApiUser apiUser) {
+        ApiUser user = userService.updateUser(apiUser);
+        return ResponseEntity.ok(user);
+    }
 }
