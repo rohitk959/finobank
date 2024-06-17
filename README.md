@@ -120,3 +120,6 @@ authenticate, and generate tokens for internal communication.
 - Fraud detection and block in case of more then 5 fraud payments
 - Dockerized entire application
 - Implemented OpenApi and Swagger documentation for microservices
+
+INFO: Due to the big scope of the assignment, I couldn't cover two points in the optional requirements. However, for my
+own knowledge, I plan to complete both points by next week.
