@@ -16,7 +16,7 @@ at https://hub.docker.com/u/rohitkalaghatkar
 ### Steps to run the application
 
 - Clone the repository on local
-- `cd docker-compose/finobank/docker-compose.yml`
+- `cd docker-compose/finobank/`
 - `docker-compose up -d`
 
 ## How to compile the application
@@ -82,6 +82,10 @@ To access keycloak server [click here](http://localhost:8060/)
 
 - username: **admin**
 - password: **admin**
+
+### Microservice registry dashboard
+
+http://localhost:8070/
 
 ### postman
 
