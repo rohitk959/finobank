@@ -103,7 +103,15 @@ application endpoints.
 - Create a single payment
 - List all payments
 - Delete a payment by ID
+- Update password and userInfo - Currently only address can updated in via endpoint. To update password it is important
+  that passwords are not handled by application and the password change is done via keycloak. So a user can login into
+  his keycloak account and update his password and info. Account url for user1@finobank.com
+  click [here](http://localhost:8060/realms/finobank/account/)
 - Logout endpoint -- Not implemented
+
+INFO: Currently, none of the three microservices are authenticated clients to Keycloak. An improvement would be to
+authenticate all the clients with Keycloak. This way, the microservices could receive a client_id and client_secret,
+authenticate, and generate tokens for internal communication.
 
 ### Optional requirements implemented
 
