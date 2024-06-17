@@ -19,6 +19,9 @@ at https://hub.docker.com/u/rohitkalaghatkar
 - `cd docker-compose/finobank/`
 - `docker-compose up -d`
 
+Please allow a minute to all the microservices to start. 3 users would be automatically setup along with sample
+accounts. You can also register new accounts after obtaining a valid token.
+
 ## How to compile the application
 
 ### Prerequisites
@@ -33,6 +36,16 @@ at https://hub.docker.com/u/rohitkalaghatkar
    docker private repository.
    INFO: `mvn clean install jib:dockerBuild` This compiles and build docker image and pushes the image to local
    repository
+
+## Workflow - Postman api calls
+
+1. Create user
+2. Create account
+3. List all accounts
+4. Add Balance to account
+5. Create payment
+6. List all payments
+7. Delete payment
 
 ## Microservices hosted
 
