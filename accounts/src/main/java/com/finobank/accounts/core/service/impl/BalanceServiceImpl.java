@@ -14,6 +14,7 @@ import com.finobank.accounts.core.model.ApiBalanceEntry;
 import com.finobank.accounts.core.service.BalanceService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Comparator;
 import java.util.Optional;
@@ -26,6 +27,7 @@ public class BalanceServiceImpl implements BalanceService {
     private final AccountRepository accountRepository;
     private final BalanceRepository balanceRepository;
 
+    @Transactional
     @Override
     public ApiBalance updateBalance(ApiBalanceEntry balanceEntry, String accountNumber, ApiBalance balance) {
         Optional<AccountEntity> account = accountRepository.findByAccountNumber(accountNumber);
@@ -40,7 +42,7 @@ public class BalanceServiceImpl implements BalanceService {
         } else {
             updatedBalance = debitBalance(account.get(), balance);
         }
-        
+
         return BalanceFactory.api(DbBalanceFactory.fromEntity(updatedBalance));
     }
 
