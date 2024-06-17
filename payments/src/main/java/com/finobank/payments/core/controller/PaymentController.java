@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.UUID;
 
 @AllArgsConstructor
 @RestController
@@ -25,5 +26,11 @@ public class PaymentController implements PaymentsApi {
     public ResponseEntity<ApiPayment> makePayment(ApiPayment apiPayment) {
         ApiPayment payment = paymentService.makePayment(apiPayment);
         return ResponseEntity.status(HttpStatus.CREATED).body(payment);
+    }
+
+    @Override
+    public ResponseEntity<String> deletePaymentById(UUID paymentId) {
+        paymentService.deletePaymentById(paymentId);
+        return ResponseEntity.ok("Payment deleted successfully.");
     }
 }

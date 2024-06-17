@@ -5,7 +5,8 @@ import lombok.Getter;
 @Getter
 public class ApplicationBaseException extends RuntimeException {
     public static final String CODE_FAILURE = "FAILURE";
-    
+    public static final String CODE_VALIDATION_FAILURE = "VALIDATION_FAILURE";
+
     private final String code;
     private final String message;
     private final Throwable cause;

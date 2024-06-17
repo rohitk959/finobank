@@ -58,6 +58,32 @@ paths:
         '400':
           description: Invalid request
 
+  /payments/{paymentId}:
+    delete:
+      tags:
+        - Payments
+      summary: Delete a payment
+      description: Delete a payment by ID
+      operationId: deletePaymentById
+      parameters:
+        - in: path
+          name: paymentId
+          required: true
+          description: Payment ID
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: string
+        '400':
+          description: Invalid request
+
+
 components:
   schemas:
     ApiAccount:

@@ -3,33 +3,35 @@ package com.finobank.payments.core.service.impl;
 import com.finobank.payments.adapter.database.entity.PaymentEntity;
 import com.finobank.payments.adapter.database.factory.DbPaymentFactory;
 import com.finobank.payments.adapter.database.repository.PaymentRepository;
-import com.finobank.payments.adapter.feignClients.AccountsFeignClient;
 import com.finobank.payments.core.domain.Payment;
-import com.finobank.payments.core.exception.ApplicationBadRequestException;
 import com.finobank.payments.core.exception.ApplicationEntityNotFoundException;
 import com.finobank.payments.core.factory.PaymentFactory;
-import com.finobank.payments.core.model.*;
+import com.finobank.payments.core.model.ApiAccount;
+import com.finobank.payments.core.model.ApiBalance;
+import com.finobank.payments.core.model.ApiPayment;
 import com.finobank.payments.core.service.PaymentService;
+import com.finobank.payments.core.service.helper.PaymentServiceHelper;
+import com.finobank.payments.core.validator.PaymentValidator;
 import lombok.AllArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
-
-import static com.finobank.payments.core.exception.ApplicationBaseException.CODE_FAILURE;
+import java.util.UUID;
 
 @AllArgsConstructor
 @Service
 public class PaymentServiceImpl implements PaymentService {
     private final PaymentRepository paymentRepository;
-    private final AccountsFeignClient accountsFeignClient;
+    private final PaymentServiceHelper paymentServiceHelper;
+    private final PaymentValidator paymentValidator;
 
     @Override
     public List<ApiPayment> getPayments(String accountNumber) {
-        validateAndGetCurrentUserAccount(accountNumber);
+        List<ApiAccount> userAccounts = paymentServiceHelper.getUserAccounts();
+
+        paymentValidator.validate(accountNumber, userAccounts);
 
         return paymentRepository.findAllByGiverAccountNumber(accountNumber).stream()
                 .map(DbPaymentFactory::fromEntity)
@@ -40,38 +42,19 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     @Transactional
     public ApiPayment makePayment(ApiPayment payment) {
-        if (payment.getGiverAccountNumber().trim().equalsIgnoreCase(payment.getBeneficiaryAccountNumber().trim())) {
-            throw ApplicationBadRequestException.builder()
-                    .code(CODE_FAILURE).message("Giver bank account and beneficiary bank account cannot be same.").build();
-        }
+        paymentServiceHelper.preparePayment(payment);
 
-        ApiAccount giverAccount = validateAndGetCurrentUserAccount(payment.getGiverAccountNumber());
+        List<ApiAccount> userAccounts = paymentServiceHelper.getUserAccounts();
 
-        ResponseEntity<ApiAccount> beneficiaryAccount = null;
-        try {
-            beneficiaryAccount = accountsFeignClient.getAccountDetails(payment.getBeneficiaryAccountNumber());
-        } catch (ApplicationEntityNotFoundException e) {
-            // PROCEED FURTHER
-        }
+        paymentValidator.validate(payment, userAccounts);
 
         ApiBalance balance = ApiBalance.builder()
                 .amount(payment.getAmount())
                 .build();
 
-        ResponseEntity<ApiBalance> debitResponse = accountsFeignClient.updateBalance(ApiBalanceEntry.DEBIT, giverAccount.getAccountNumber(), balance);
+        paymentServiceHelper.debitGiverAccount(payment, balance);
 
-        if (!debitResponse.getStatusCode().is2xxSuccessful()) {
-            throw ApplicationBadRequestException.builder()
-                    .code(CODE_FAILURE).message("Payment failed.")
-                    .build();
-        }
-
-        if (Objects.nonNull(beneficiaryAccount) && beneficiaryAccount.getStatusCode().is2xxSuccessful() && beneficiaryAccount.hasBody()) {
-            accountsFeignClient.updateBalance(ApiBalanceEntry.CREDIT, payment.getBeneficiaryAccountNumber(), balance);
-        }
-
-        payment.setCurrency("EUR");
-        payment.setStatus(ApiPaymentStatus.EXECUTED);
+        paymentServiceHelper.creditBeneficiaryAccount(payment, balance);
 
         Payment paymentCore = PaymentFactory.core(payment);
         PaymentEntity savedPayment = paymentRepository.save(DbPaymentFactory.toEntity(paymentCore));
@@ -79,23 +62,19 @@ public class PaymentServiceImpl implements PaymentService {
         return PaymentFactory.api(DbPaymentFactory.fromEntity(savedPayment));
     }
 
-    private ApiAccount validateAndGetCurrentUserAccount(String accountNumber) {
-        ResponseEntity<List<ApiAccount>> userAccounts = accountsFeignClient.getAccounts();
+    @Override
+    @Transactional
+    public void deletePaymentById(UUID paymentId) {
+        Optional<PaymentEntity> payment = paymentRepository.findById(paymentId);
 
-        if (!userAccounts.getStatusCode().is2xxSuccessful() || userAccounts.getBody() == null || userAccounts.getBody().isEmpty()) {
-            throw ApplicationBadRequestException.builder()
-                    .code(CODE_FAILURE).message("No bank accounts registered for current user.").build();
+        if (payment.isEmpty()) {
+            throw new ApplicationEntityNotFoundException(paymentId.toString());
         }
 
-        Optional<ApiAccount> userAccount = userAccounts.getBody().stream()
-                .filter(a -> a.getAccountNumber().equals(accountNumber))
-                .findFirst();
+        List<ApiAccount> userAccounts = paymentServiceHelper.getUserAccounts();
 
-        if (userAccount.isEmpty()) {
-            throw ApplicationBadRequestException.builder()
-                    .code(CODE_FAILURE).message("Given bank account does not belong to current user.").build();
-        }
+        paymentValidator.validate(payment.get().getGiverAccountNumber(), userAccounts);
 
-        return userAccount.get();
+        paymentRepository.delete(payment.get());
     }
 }
